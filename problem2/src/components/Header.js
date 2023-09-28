@@ -6,14 +6,20 @@ const Header = () => {
         <div className="flex justify-between h-16 w-full">
             <img className="p-2 items-center" src={logo} alt="Switcheo" />
             <div className="p-2 items-center flex">
-                <div className="w-32 p-3 border rounded-full items-center mx-2 bg-slate-600 hover:bg-slate-700">
-                    <button className="font-extrabold text-white text-lg">Swap</button>
+                <div className="w-32 p-3 border border-sky-950 rounded-full items-center mx-2 bg-sky-900 hover:bg-sky-950">
+                    <button className="font-extrabold text-white text-lg">
+                        Swap
+                    </button>
                 </div>
-                <div className="w-32 p-3 border rounded-full items-center mx-2 bg-slate-600 hover:bg-slate-700">
-                    <button className="font-extrabold text-white text-lg">Wallet</button>
+                <div className="w-32 p-3 border border-sky-950 rounded-full items-center mx-2 bg-sky-900 hover:bg-sky-950">
+                    <button className="font-extrabold text-white text-lg">
+                        Wallet
+                    </button>
                 </div>
-                <div className="w-32 p-3 border rounded-full items-center mx-2 bg-slate-600 hover:bg-slate-700">
-                    <button className="font-extrabold text-white text-lg">Connect</button>
+                <div className="w-32 p-3 border border-sky-950 rounded-full items-center mx-2 bg-sky-900 hover:bg-sky-950">
+                    <button className="font-extrabold text-white text-lg">
+                        Connect
+                    </button>
                 </div>
             </div>
         </div>
