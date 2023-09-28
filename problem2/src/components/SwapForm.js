@@ -2,10 +2,13 @@ import React, { useState } from "react"
 import { useEffect } from "react"
 import Modal from "react-modal"
 import CloseButton from "./CloseButton"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 Modal.setAppElement("#root")
 
 const SwapForm = () => {
+    const [buttonDisabled, setButtonDisabled] = useState(false)
     const [isInnerOpen, setIsInnerOpen] = useState(false)
     const [rate, setRate] = useState([])
     const [currencyImage, setCurrencyImage] = useState([])
@@ -14,6 +17,8 @@ const SwapForm = () => {
     const [outputCurrency, setOutputCurrency] = useState("USD")
     const [inputClick, setInputClick] = useState(false)
     const [outputClick, setOutputClick] = useState(false)
+    const [inputAlert, setInputAlert] = useState(false)
+    const [outputAlert, setOutputAlert] = useState(false)
     const [inputAmount, setInputAmount] = useState(0)
     const [outputAmount, setOutputAmount] = useState(0)
     const [inputAmountModify, setInputAmountModify] = useState(false)
@@ -93,7 +98,6 @@ const SwapForm = () => {
         }
     }, [outputAmountModify, outputCurrencyModify])
 
-
     useEffect(() => {
         if (searchTerm == "") {
             setFilteredCurrencyImage(currencyImage)
@@ -118,11 +122,52 @@ const SwapForm = () => {
         setFilteredCurrencyImage(temp)
     }
 
+    function alertSuccess() {
+        setInputAmount(0)
+        setInputAmountModify(!inputAmountModify)
+        toast.success("Swap Success", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+        })
+    }
+
+    function checkInputAmount(value) {
+        var regex = /^[0-9]+$/
+        setInputAmount(value)
+        setInputAmountModify(!inputAmountModify)
+        if (value.match(regex)) {
+            setInputAlert(false)
+            setButtonDisabled(false)
+        } else {
+            setInputAlert(true)
+            setButtonDisabled(true)
+        }
+    }
+
+    function checkOutputAmount(value) {
+        var regex = /^[0-9]+$/
+        setOutputAmount(value)
+        setOutputAmountModify(!inputAmountModify)
+        if (value.match(regex)) {
+            setOutputAlert(false)
+            setButtonDisabled(false)
+        } else {
+            setOutputAlert(true)
+            setButtonDisabled(true)
+        }
+    }
+
     return (
         <>
             <div className="w-full">
                 <div className="flex flex-col">
-                    <div className="flex flex-row border rounded-xl p-2 mb-4 mt-2 items-center justify-between bg-pink-300">
+                    <div className="flex flex-row border rounded-xl p-2 mb-4 mt-2 items-center justify-between bg-pink-300 shadow-xl">
                         <div className="flex flex-col items-start">
                             <label for="input-amount" className="font-bold">
                                 You pay
@@ -133,10 +178,12 @@ const SwapForm = () => {
                                 type="text"
                                 value={inputAmount}
                                 onChange={(e) => {
-                                    setInputAmount(e.target.value)
-                                    setInputAmountModify(!inputAmountModify)
+                                    checkInputAmount(e.target.value)
                                 }}
                             />
+                            <text className="text-red-500" hidden={!inputAlert}>
+                                Input must be a value
+                            </text>
                             {isBusy ? (
                                 <text>Loading</text>
                             ) : (
@@ -182,7 +229,7 @@ const SwapForm = () => {
                         </div>
                     </div>
 
-                    <div className="flex flex-row border rounded-xl p-2 my-4 items-center justify-between bg-pink-300">
+                    <div className="flex flex-row border rounded-xl p-2 my-4 items-center justify-between bg-pink-300 shadow-xl">
                         <div className="flex flex-col items-start">
                             <label for="output-amount" className="font-bold">
                                 You receive
@@ -197,6 +244,9 @@ const SwapForm = () => {
                                     setOutputAmountModify(!outputAmountModify)
                                 }}
                             />
+                            <text className="text-red-500" hidden={!inputAlert}>
+                                Input must be a value
+                            </text>
                             {isBusy ? (
                                 <text>Loading</text>
                             ) : (
@@ -241,7 +291,13 @@ const SwapForm = () => {
                             </button>
                         </div>
                     </div>
-                    <button>CONFIRM SWAP</button>
+                    <button
+                        className="border rounded-sm mx-40 mb-2 py-2 font-extrabold bg-purple-500 hover:bg-purple-600 shadow-xl"
+                        disabled={buttonDisabled}
+                        onClick={alertSuccess}
+                    >
+                        CONFIRM SWAP
+                    </button>
                 </div>
             </div>
             <Modal
@@ -317,6 +373,7 @@ const SwapForm = () => {
                     </button>
                 ))}
             </Modal>
+            <ToastContainer />
         </>
     )
 }
